@@ -1,4 +1,4 @@
-package rss
+package http
 
 import (
 	"google.golang.org/appengine"
@@ -7,7 +7,7 @@ import (
 )
 
 // Do a GET HTTP Request. Using Context, and URL Fetch.
-func GET(r *http.Request) (resp *http.Response, err error){
+func Get(r *http.Request) (resp *http.Response, err error) {
 	req, err := http.NewRequest(http.MethodGet, URL, nil)
 	if err != nil {
 		return nil, err
@@ -19,5 +19,5 @@ func GET(r *http.Request) (resp *http.Response, err error){
 	if err != nil {
 		return nil, err
 	}
-
+	return resp, nil
 }

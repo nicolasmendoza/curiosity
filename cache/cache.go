@@ -1,4 +1,4 @@
-package rss
+package cache
 
 import (
 	"google.golang.org/appengine"
@@ -8,7 +8,7 @@ import (
 )
 
 // Get content of a Item of a specific key from memcached.
-func getItem(r *http.Request, key string) (item *memcache.Item, err error) {
+func GetItem(r *http.Request, key string) (item *memcache.Item, err error) {
 	// New context...
 	cxt := appengine.NewContext(r)
 	// Getting key from cache...
@@ -22,10 +22,10 @@ func getItem(r *http.Request, key string) (item *memcache.Item, err error) {
 
 // Set item in memcached.
 // v = value to stored, k = Unique key for identified item in memcache.
-func setItem(r *http.Request, k string, v string){
+func SetItem(r *http.Request, k string, v string){
 	cxt := appengine.NewContext(r)
 	item := &memcache.Item{
-		Key: url,
+		Key: k,
 		Value: []byte(v),
 	}
 	if err := memcache.Set(cxt, item); err !=nil {
