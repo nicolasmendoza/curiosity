@@ -5,26 +5,30 @@ import (
 	"fmt"
 )
 
-package rss
+var Pool *sql.DB // pool connection...
 
-import (
-"database/sql"
-"fmt"
+const (
+	schema = "root:password@/rsss" // Schema name
+	driver = "mysql"               // Driver name
 )
 
-var dataSourceName = "root:password@/rsss"
-var DB *sql.DB
-
-func init() {
-	// The returned DB is safe for concurrent use by multiple goroutines
-	// and maintains its own pool of idle connections. Thus, the Open
-	// function should be called just once. It is rarely necessary to
-	// close a DB.
-	fmt.Println("Initializing database!!!!")
-	db, err := sql.Open("mysql", dataSourceName)
-	if err != nil {
-		panic(err.Error)
+func Get() {
+	if Pool == nil {
+		fmt.Println("Preparing Database connection...")
+		initConnection()
 	}
-	DB = db
+
 }
 
+// The returned DB is safe for concurrent use by multiple goroutines
+// and maintains its own pool of idle connections. Thus, the Open
+// function should be called just once. It is rarely necessary to
+// close a DB.
+func initConnection() {
+	db, err := sql.Open(driver, schema)
+	if err != nil {
+		panic(err.Error())
+	}
+	// set to db to Pool
+	Pool = db
+}

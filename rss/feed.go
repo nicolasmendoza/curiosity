@@ -3,9 +3,6 @@ package rss
 
 import "fmt"
 
-func init(){
-	readFeeds()
-}
 var Feeds = []struct {
 	Name     string
 	Category string

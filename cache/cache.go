@@ -29,6 +29,6 @@ func SetItem(r *http.Request, k string, v string){
 		Value: []byte(v),
 	}
 	if err := memcache.Set(cxt, item); err !=nil {
-		log.Errorf(ctx, err.Error())
+		log.Errorf(cxt, err.Error())
 	}
 }

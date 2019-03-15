@@ -2,7 +2,6 @@ package rss
 
 import (
 	"curiosity/cache"
-	_http "curiosity/http"
 	"fmt"
 	"google.golang.org/appengine"
 	"google.golang.org/appengine/log"
@@ -13,11 +12,10 @@ import (
 	"time"
 )
 
-// THis keys are used for identified cache.
+// These keys are used for identified cache.
 const (
-	keyLastMod= "lastmod"
-	keyEtag = "etag"
-
+	keyLastMod = "lastmod"
+	keyEtag    = "etag"
 )
 
 func getCacheHeaders(r *http.Request, key string) (headers map[string]string, err error) {
@@ -33,7 +31,7 @@ func getCacheHeaders(r *http.Request, key string) (headers map[string]string, er
 	return headers, nil
 }
 
-func setCacheHeaders(r *http.Request, h http.Header, url string){
+func setCacheHeaders(r *http.Request, h http.Header, url string) {
 	/*
 		package main
 
@@ -64,17 +62,17 @@ func setCacheHeaders(r *http.Request, h http.Header, url string){
 
 	// parsing time
 	t, err := time.Parse(time.RFC1123, h.Get(keyLastMod))
-	if err!=nil {
+	if err != nil {
 		log.Errorf(cxt, err.Error())
 	}
 
 	item := &memcache.Item{
-		Key: url,
+		Key:   url,
 		Value: []byte(fmt.Sprintf("%s|%s", h.Get(keyEtag), t.Format(time.RFC1123))),
 	}
 
-	if err:= memcache.Set(ctx, item); err !=nil{
-		log.Errorf(ctx, err.Error())
+	if err := memcache.Set(cxt, item); err != nil {
+		log.Errorf(cxt, err.Error())
 	}
 
 }
@@ -95,13 +93,13 @@ func conditionalGet(r *http.Request, url string) (body []byte, err error) {
 	}
 
 	// do Request.
-	resp, err := _http.Get(req)
-	if err!=nil{
+	resp, err := _http.Get(req, url)
+	if err != nil {
 		return nil, err
 	}
 
 	// check if content is OK 200 and this was modified, so set new values in Cache.
-	if resp.StatusCode == http.StatusOK{
+	if resp.StatusCode == http.StatusOK {
 		setCacheHeaders(r, resp.Header, url)
 	}
 	body, err = ioutil.ReadAll(resp.Body)
@@ -110,7 +108,7 @@ func conditionalGet(r *http.Request, url string) (body []byte, err error) {
 	}
 	// Defer if body is not Nil...
 	if resp.Body != nil {
-		defer resp.Body.close()
+		defer resp.Body.Close()
 	}
 
 	return body, nil

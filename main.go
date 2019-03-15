@@ -1,25 +1,16 @@
 package main
 
 import (
-	_ "curiosity/rss"
+	"curiosity/rss"
 	"fmt"
 	"google.golang.org/appengine"
 	"net/http"
-	"time"
 )
 
-var lastExecuted = 1
-
 func main() {
-	// Tickers..
-	ticker := time.NewTicker(50 * time.Minute)
-	go func() {
-		for t := range ticker.C {
-			lastExecuted += 1
-			fmt.Println("Tick at", t)
-			fmt.Println("------------>", lastExecuted)
-		}
-	}()
+	// Start beating...
+	fmt.Println("Helloooo...!")
+	rss.StartBeat()
 
 	//URL Handlers
 	http.HandleFunc("/", handleIndex)
